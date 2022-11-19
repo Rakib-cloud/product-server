@@ -25,7 +25,9 @@ async function run() {
         const productCollection = database.collection("products");
         const adminCollection = database.collection("homepages");
 
-        // add course endpoints
+        const rateCollection = database.collection("rates");
+
+        //post api for product upload
         app.post('/product', async (req, res) => {
 
             const data = req.body;
@@ -34,7 +36,7 @@ async function run() {
 
         });
 
-
+//post api for homepage content
         app.post('/homepage', async (req, res) => {
 
             const data = req.body;
@@ -43,19 +45,30 @@ async function run() {
 
         });
 
+        //post api for rate post
+
+        app.post('/rate', async (req, res) => {
+
+            const data = req.body;
+            const result = await rateCollection.insertOne(data);
+            res.json(result);
+
+        });
+        //get api for all product
         app.get('/product', async (req, res) => {
 
             const result = await productCollection.find({}).toArray();
             res.send(result);
 
         });
+        //get api for homepage content
         app.get('/homepage', async (req, res) => {
 
             const result = await adminCollection.find({}).toArray();
             res.send(result);
 
         });
-
+//get api for specific product
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -64,7 +77,14 @@ async function run() {
         });
 
         
+     //get api for rate 
 
+     app.get('/rate', async (req, res) => {
+
+        const result = await rateCollection.find({}).toArray();
+        res.send(result);
+
+    });
        
 
     } finally {
